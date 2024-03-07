@@ -22,9 +22,15 @@ async function viewOrders({role}) {
   authorize(role, [Role.Admin, Role.Manager]);
 
   // Fetch orders with specific attributes
-  return await db.Order.findAll({
+  const orders = await db.Order.findAll({
     attributes: ["id", "orderName", "customerName"],
   });
+
+  if (orders.length === 0) {
+    throw "The Order is empty.";
+  }
+
+  return orders;
 }
 
 // Get order by ID (accessible by Admin and Manager roles)
